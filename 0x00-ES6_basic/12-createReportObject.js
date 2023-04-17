@@ -1,18 +1,19 @@
 export default function createReportObject(employeesList) {
-  const departments = {};
-  employeesList.forEach((employee) => {
-    const { department, name } = employee;
-    if (departments[department]) {
-      departments[department] = [...departments[department], name];
-    } else {
-      departments[department] = [name];
+  const allEmployees = {};
+
+  // group employees by department
+  for (const [name, employees] of Object.entries(employeesList)) {
+    if (!allEmployees[name]) {
+      allEmployees[name] = [];
     }
-  });
+    allEmployees[name].push(...employees);
+  }
 
   return {
-    allEmployees: departments,
-    getNumberOfDepartments() {
-      return Object.keys(departments).length;
-    },
+    allEmployees,
+
+    // return number of departments
+    getNumberOfDepartments: () => Object.keys(allEmployees).length,
   };
 }
+
